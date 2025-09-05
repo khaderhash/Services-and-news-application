@@ -59,3 +59,7 @@ Built with Flutter and GetX, the application ensures a high-performance, respons
 Clone the repo:
 ```sh
 git clone https://github.com/khaderhash/Services-and-news-application.git
+
+## 🎨 Design
+The application's UI/UX is based on the high-fidelity mockups available on Behance.  
+👉 [View the Design on Behance](https://www.behance.net/gallery/234016133/Syrian-society-for-social-development)  
