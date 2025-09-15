@@ -6,14 +6,14 @@ import '../../screens/login_view/login.dart';
 class ApiService {
   final Dio _dio = Dio();
   final String _baseUrl = 'https://sssdsy.pythonanywhere.com/api/';
-  final _storage = const FlutterSecureStorage();
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
   bool _isRefreshing = false;
 
   ApiService() {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await _storage.read(key: 'accessToken');
+          final token = await storage.read(key: 'accessToken');
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
@@ -29,7 +29,7 @@ class ApiService {
                 final newAccessToken = await refreshToken();
 
                 if (newAccessToken != null) {
-                  await _storage.write(
+                  await storage.write(
                     key: 'accessToken',
                     value: newAccessToken,
                   );
@@ -51,7 +51,7 @@ class ApiService {
       ),
     );
   }
-  Future<Response> register({
+  Future<Response?> register({
     required String firstName,
     required String lastName,
     required String email,
@@ -62,44 +62,104 @@ class ApiService {
     required String gender,
     required String birthDate,
   }) async {
-    var formData = FormData.fromMap({
-      'first_name': firstName,
-      'last_name': lastName,
-      'email': email,
-      'phone': phone,
-      'password': password,
-      'confirm_password': confirmPassword,
-      'address': address,
-      'gender': gender,
-      'birth_date': birthDate,
-    });
+    try {
+      final response = await _dio.post(
+        '${_baseUrl}user/register/',
+        data: {
+          'first_name': firstName,
+          'last_name': lastName,
+          'email': email,
+          'phone': phone,
+          'password': password,
+          'confirm_password': confirmPassword,
+          'address': address,
+          'gender': gender,
+          'birth_date': birthDate,
+        },
+        options: Options(contentType: Headers.jsonContentType),
+      );
 
-    return await _dio.post('${_baseUrl}user/register/', data: formData);
+      print('REGISTER STATUS: ${response.statusCode}');
+      print('REGISTER DATA: ${response.data}');
+      return response;
+    } on DioException catch (e) {
+      print('REGISTER ERROR STATUS: ${e.response?.statusCode}');
+      print('REGISTER ERROR DATA: ${e.response?.data}');
+      print('REGISTER ERROR MESSAGE: ${e.message}');
+      return e.response;
+    } catch (e) {
+      print('REGISTER UNEXPECTED ERROR: $e');
+      return null;
+    }
   }
 
+  // Future<Response> confirmRegisterOtp({
+  //   required String email,
+  //   required String otp,
+  // }) async {
+  //   return await _dio.post(
+  //     '${_baseUrl}user/confirm-otp/',
+  //     data: {'email': email, 'otp': otp},
+  //   );
+  // }
   Future<Response> confirmRegisterOtp({
     required String email,
     required String otp,
   }) async {
-    return await _dio.post(
-      '${_baseUrl}user/confirm-otp/',
-      data: {'email': email, 'otp': otp},
-    );
+    try {
+      final response = await _dio.post(
+        '${_baseUrl}user/confirm-otp/',
+        data: {'email': email, 'otp': otp},
+      );
+      if (response.statusCode == 200) {
+        await storage.write(key: 'verified_otp_for_${email}', value: otp);
+      }
+      return response;
+    } on DioException catch (e) {
+      rethrow;
+    }
   }
+  // Future<Response> login({
+  //   required String email,
+  //   required String password,
+  // }) async {
+  //   return await _dio.post(
+  //     '${_baseUrl}user/login/',
+  //     data: {'email': email, 'password': password},
+  //   );
+  // }
 
   Future<Response> login({
     required String email,
     required String password,
+    required String otp,
   }) async {
-    return await _dio.post(
-      '${_baseUrl}user/login/',
-      data: {'email': email, 'password': password},
-    );
+    try {
+      final response = await _dio.post(
+        '${_baseUrl}user/login/',
+        data: {'email': email, 'password': password, 'otp': otp},
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
+
+      if (response.statusCode == 200) {
+        final accessToken = response.data['access'];
+        final refreshToken = response.data['refresh'];
+        if (accessToken != null && refreshToken != null) {
+          await storage.write(key: 'accessToken', value: accessToken);
+          await storage.write(key: 'refreshToken', value: refreshToken);
+          await storage.delete(key: 'verified_otp_for_${email}');
+        }
+      }
+      return response;
+    } on DioException catch (e) {
+      print("Login error: $e");
+      rethrow;
+    }
   }
 
   Future<String?> refreshToken() async {
     try {
-      final refreshToken = await _storage.read(key: 'refreshToken');
+      final refreshToken = await storage.read(key: 'refreshToken');
       if (refreshToken == null) return null;
 
       final dioRefresh = Dio();
@@ -119,7 +179,7 @@ class ApiService {
   }
 
   void _logoutAndNavigateToLogin() async {
-    await _storage.deleteAll();
+    await storage.deleteAll();
     Get.offAll(() => const Login());
     Get.snackbar('انتهت الجلسة', 'الرجاء تسجيل الدخول مرة أخرى');
   }
@@ -175,7 +235,7 @@ class ApiService {
   }
 
   Future<Response> logout() async {
-    final refreshToken = await _storage.read(key: 'refreshToken');
+    final refreshToken = await storage.read(key: 'refreshToken');
     if (refreshToken == null) {
       throw Exception("Refresh token not found. Cannot logout from server.");
     }

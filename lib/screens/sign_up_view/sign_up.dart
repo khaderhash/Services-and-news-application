@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:my_app11/screens/sign_up_view/signup_controller.dart';
 import '../../UI/shared/custom_widgets/custom_button.dart';
 import '../../UI/shared/custom_widgets/custom_text_form_fieled.dart';
@@ -33,108 +32,113 @@ class _SignupPageState extends State<SignupPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: screenHeight * 0.02),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.purple,
-                      ),
-                      onPressed: () => Get.back(),
-                      iconSize: screenWidth * 0.06,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: screenHeight * 0.05),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: screenHeight * 0.02),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
                     ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.purple,
+                          ),
+                          onPressed: () => Get.back(),
+                          iconSize: screenWidth * 0.06,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "إنشاء حساب جديد",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenWidth * 0.045,
+                                ),
+                              ),
+                              Text(
+                                currentStep == 0
+                                    ? "الرجاء إدخال معلوماتك الشخصية هنا"
+                                    : "الرجاء إدخال معلومات الحماية",
+                                style: TextStyle(fontSize: screenWidth * 0.05),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Center(
+                    child: Image.asset(
+                      currentStep == 0
+                          ? 'images/signup_security.png'
+                          : 'images/signup_personal.png',
+                      height: screenHeight * 0.25,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
                         children: [
-                          Text(
-                            "إنشاء حساب جديد",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenWidth * 0.045,
+                          GestureDetector(
+                            onTap: () => goToStep(0),
+                            child: CircleAvatar(
+                              radius: screenWidth * 0.035,
+                              backgroundColor: currentStep == 0
+                                  ? Colors.purple
+                                  : Colors.grey,
                             ),
                           ),
+                          SizedBox(height: screenHeight * 0.005),
                           Text(
-                            currentStep == 0
-                                ? "الرجاء إدخال معلوماتك الشخصية هنا"
-                                : "الرجاء إدخال معلومات الحماية",
-                            style: TextStyle(fontSize: screenWidth * 0.05),
+                            "المعلومات الشخصية",
+                            style: TextStyle(fontSize: screenWidth * 0.035),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: screenHeight * 0.01),
-              Center(
-                child: Image.asset(
-                  currentStep == 0
-                      ? 'images/signup_security.png'
-                      : 'images/signup_personal.png',
-                  height: screenHeight * 0.25,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.04),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () => goToStep(0),
-                        child: CircleAvatar(
-                          radius: screenWidth * 0.035,
-                          backgroundColor: currentStep == 0
-                              ? Colors.purple
-                              : Colors.grey,
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.005),
-                      Text(
-                        "المعلومات الشخصية",
-                        style: TextStyle(fontSize: screenWidth * 0.035),
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () => goToStep(1),
+                            child: CircleAvatar(
+                              radius: screenWidth * 0.035,
+                              backgroundColor: currentStep == 1
+                                  ? Colors.purple
+                                  : Colors.grey,
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * 0.005),
+                          Text(
+                            "القفل/الحماية",
+                            style: TextStyle(fontSize: screenWidth * 0.035),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Column(
+                  SizedBox(height: screenHeight * 0.02),
+
+                  IndexedStack(
+                    index: currentStep,
                     children: [
-                      GestureDetector(
-                        onTap: () => goToStep(1),
-                        child: CircleAvatar(
-                          radius: screenWidth * 0.035,
-                          backgroundColor: currentStep == 1
-                              ? Colors.purple
-                              : Colors.grey,
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.005),
-                      Text(
-                        "القفل/الحماية",
-                        style: TextStyle(fontSize: screenWidth * 0.035),
-                      ),
+                      _buildPersonalInfoForm(screenHeight, screenWidth),
+                      _buildSecurityForm(screenHeight, screenWidth),
                     ],
                   ),
                 ],
               ),
-              Expanded(
-                child: IndexedStack(
-                  index: currentStep,
-                  children: [
-                    _buildPersonalInfoForm(screenHeight, screenWidth),
-                    _buildSecurityForm(screenHeight, screenWidth),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -143,196 +147,152 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget _buildPersonalInfoForm(double screenHeight, double screenWidth) {
     return Padding(
-      padding: EdgeInsets.all(screenWidth * 0.05),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: screenHeight * 0.012,
-            left: screenWidth * 0.08,
-            right: screenWidth * 0.08,
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextFormFieled(
+            hinText: "الاسم الكامل",
+            prefIcon: Icons.person_outline,
+            controller: controler.nameController,
+            isSecure: false,
+            validater: (val) {
+              if (val == null || val.isEmpty) return "يرجى إدخال الاسم الكامل";
+            },
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          SizedBox(height: screenHeight * 0.015),
+          CustomTextFormFieled(
+            hinText: "البريد الإلكتروني",
+            prefIcon: Icons.email_outlined,
+            controller: controler.emailController,
+            isSecure: false,
+            validater: (val) {
+              if (val == null || val.isEmpty)
+                return "يرجى إدخال البريد الإلكتروني";
+            },
+          ),
+          SizedBox(height: screenHeight * 0.015),
+          CustomTextFormFieled(
+            hinText: "تاريخ الميلاد",
+            prefIcon: Icons.calendar_today,
+            controller: controler.birthController,
+            validater: (val) {
+              if (val == null || val.isEmpty) return "يرجى إدخال تاريخ الميلاد";
+              return null;
+            },
+            isDate: true,
+            textColor: const Color.fromARGB(255, 63, 23, 116),
+            prefIconColor: const Color.fromARGB(255, 63, 23, 116),
+          ),
+          SizedBox(height: screenHeight * 0.015),
+          CustomTextFormFieled(
+            hinText: "+963-111-111-111",
+            prefIcon: Icons.phone,
+            controller: controler.phoneController,
+            isSecure: false,
+            validater: (val) {
+              if (val == null || val.isEmpty) return "يرجى إدخال رقم الهاتف";
+            },
+          ),
+          SizedBox(height: screenHeight * 0.02),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomTextFormFieled(
-                hinText: "الاسم الكامل",
-                prefIcon: Icons.person_outline,
-                controller: controler.nameController,
-                isSecure: false,
-                validater: (val) {
-                  if (val == null || val.isEmpty)
-                    return "يرجى إدخال الاسم الكامل";
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedGender = 'أنثى';
+                  });
                 },
-              ),
-              SizedBox(height: screenHeight * 0.01),
-              CustomTextFormFieled(
-                hinText: "البريد الإلكتروني",
-                prefIcon: Icons.email_outlined,
-                controller: controler.emailController,
-                isSecure: false,
-                validater: (val) {
-                  if (val == null || val.isEmpty)
-                    return "يرجى إدخال البريد الإلكتروني";
-                },
-              ),
-              SizedBox(height: screenHeight * 0.01),
-              CustomTextFormFieled(
-                hinText: "تاريخ الميلاد",
-                prefIcon: Icons.calendar_today,
-                controller: controler.birthController,
-                validater: (val) {
-                  if (val == null || val.isEmpty)
-                    return "يرجى إدخال تاريخ الميلاد";
-                  return null;
-                },
-                isDate: true,
-                textColor: const Color.fromARGB(255, 63, 23, 116),
-                prefIconColor: const Color.fromARGB(255, 63, 23, 116),
-              ),
-
-              SizedBox(height: screenHeight * 0.01),
-              SizedBox(
-                width: screenWidth * 1.5,
-                height: screenHeight * .065,
-                child: CustomTextFormFieled(
-                  hinText: "+963-111-111-111",
-                  prefIcon: Icons.phone,
-                  controller: controler.phoneController,
-                  isSecure: false,
-                  validater: (val) {
-                    if (val == null || val.isEmpty)
-                      return "يرجى إدخال رقم الهاتف";
-                  },
+                child: Row(
+                  children: [
+                    const Text("أنثى"),
+                    SizedBox(width: screenWidth * 0.02),
+                    CircleAvatar(
+                      radius: screenWidth * 0.017,
+                      backgroundColor: selectedGender == 'أنثى'
+                          ? Colors.purple
+                          : Colors.grey.shade300,
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: screenHeight * 0.02),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedGender = 'أنثى';
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        const Text("أنثى"),
-                        SizedBox(width: screenWidth * 0.02),
-                        CircleAvatar(
-                          radius: screenWidth * 0.017,
-                          backgroundColor: selectedGender == 'أنثى'
-                              ? Colors.purple
-                              : Colors.grey.shade300,
-                        ),
-                      ],
+              SizedBox(width: screenWidth * 0.07),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedGender = 'ذكر';
+                  });
+                },
+                child: Row(
+                  children: [
+                    const Text("ذكر"),
+                    SizedBox(width: screenWidth * 0.02),
+                    CircleAvatar(
+                      radius: screenWidth * 0.017,
+                      backgroundColor: selectedGender == 'ذكر'
+                          ? Colors.purple
+                          : Colors.grey.shade300,
                     ),
-                  ),
-                  SizedBox(width: screenWidth * 0.07),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedGender = 'ذكر';
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        const Text("ذكر"),
-                        SizedBox(width: screenWidth * 0.02),
-                        CircleAvatar(
-                          radius: screenWidth * 0.017,
-                          backgroundColor: selectedGender == 'ذكر'
-                              ? Colors.purple
-                              : Colors.grey.shade300,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: screenHeight * 0.01),
-
-              Padding(
-                padding: EdgeInsets.only(
-                  left: screenWidth * 0.08,
-                  right: screenWidth * 0.08,
-                ),
-                child: CustomButton(
-                  text: "التالي",
-                  color: Colors.white,
-                  backgroundColor: const Color.fromARGB(255, 63, 23, 116),
-                  borderColor: const Color.fromARGB(255, 63, 23, 116),
-                  onPressed: () {
-                    goToStep(1);
-                  },
+                  ],
                 ),
               ),
             ],
           ),
-        ),
+          SizedBox(height: screenHeight * 0.03),
+          CustomButton(
+            text: "التالي",
+            color: Colors.white,
+            backgroundColor: const Color.fromARGB(255, 63, 23, 116),
+            borderColor: const Color.fromARGB(255, 63, 23, 116),
+            onPressed: () {
+              goToStep(1);
+            },
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildSecurityForm(double screenHeight, double screenWidth) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: screenHeight * 0.025,
-              horizontal: screenWidth * 0.03,
-            ),
-            child: CustomTextFormFieled(
-              hinText: "كلمة المرور",
-              prefIcon: Icons.lock_outline,
-              suffIcon: Icons.visibility,
-              controller: controler.passController,
-              isSecure: true,
-              validater: (val) {
-                if (val == null || val.isEmpty) return "يرجى إدخال كلمة المرور";
-                if (val.length < 6) return "كلمة المرور قصيرة جداً";
-              },
-            ),
+          CustomTextFormFieled(
+            hinText: "كلمة المرور",
+            prefIcon: Icons.lock_outline,
+            suffIcon: Icons.visibility,
+            controller: controler.passController,
+            isSecure: true,
+            validater: (val) {
+              if (val == null || val.isEmpty) return "يرجى إدخال كلمة المرور";
+              if (val.length < 6) return "كلمة المرور قصيرة جداً";
+            },
           ),
-          SizedBox(height: screenHeight * 0.01),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: screenHeight * 0.01,
-              horizontal: screenWidth * 0.03,
-            ),
-            child: CustomTextFormFieled(
-              hinText: "تأكيد كلمة المرور",
-              prefIcon: Icons.lock_outline,
-              suffIcon: Icons.visibility,
-              controller: controler.confirmPassController,
-              isSecure: true,
-              validater: (val) {
-                if (val == null || val.isEmpty) return "يرجى تأكيد كلمة المرور";
-                if (val != controler.passController.text) {
-                  return "كلمتا المرور غير متطابقتين";
-                }
-              },
-            ),
+          SizedBox(height: screenHeight * 0.015),
+          CustomTextFormFieled(
+            hinText: "تأكيد كلمة المرور",
+            prefIcon: Icons.lock_outline,
+            suffIcon: Icons.visibility,
+            controller: controler.confirmPassController,
+            isSecure: true,
+            validater: (val) {
+              if (val == null || val.isEmpty) return "يرجى تأكيد كلمة المرور";
+              if (val != controler.passController.text) {
+                return "كلمتا المرور غير متطابقتين";
+              }
+            },
           ),
           SizedBox(height: screenHeight * 0.03),
-
-          Padding(
-            padding: EdgeInsets.only(
-              left: screenWidth * 0.08,
-              right: screenWidth * 0.08,
-            ),
-            child: CustomButton(
-              text: "إنشاء الحساب",
-              color: Colors.white,
-              backgroundColor: const Color.fromARGB(255, 63, 23, 116),
-              borderColor: const Color.fromARGB(255, 63, 23, 116),
-              onPressed: () {
-                controler.registerUser(gender: selectedGender);
-              },
-            ),
+          CustomButton(
+            text: "إنشاء الحساب",
+            color: Colors.white,
+            backgroundColor: const Color.fromARGB(255, 63, 23, 116),
+            borderColor: const Color.fromARGB(255, 63, 23, 116),
+            onPressed: () {
+              controler.registerUser(gender: selectedGender);
+            },
           ),
         ],
       ),

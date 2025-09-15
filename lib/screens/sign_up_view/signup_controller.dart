@@ -37,7 +37,7 @@ class SignupController extends GetxController {
         birthDate: birthController.text,
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
         Get.snackbar('نجاح', 'تم إرسال رمز التحقق إلى بريدك الإلكتروني');
         Get.to(
           () => OptCode(email: emailController.text, isRegistration: true),

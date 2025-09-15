@@ -45,25 +45,26 @@ class OptCodeController extends GetxController {
     }
 
     isLoading.value = true;
+
     try {
       Response response;
-
       if (isRegistration) {
-        print('Email: $email, OTP: $otp');
+        print('[OTP Verification] Email: $email, OTP: $otp');
         response = await _apiService.confirmRegisterOtp(email: email, otp: otp);
       } else {
-        print('Email: $email, OTP: $otp');
+        print('[OTP Verification] Email: $email, OTP: $otp');
         response = await _apiService.confirmForgotPasswordOtp(
           email: email,
           otp: otp,
         );
       }
 
-      print('Server   StatusCode: ${response.statusCode}');
-      print('Server  data: ${response.data}');
+      print('[Server Response] StatusCode: ${response.statusCode}');
+      print('[Server Response] Data: ${response.data}');
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         if (isRegistration) {
+          await _apiService.confirmRegisterOtp(email: email, otp: otp);
           Get.snackbar(
             'نجاح',
             'تم تأكيد الحساب بنجاح. يمكنك الآن تسجيل الدخول.',
@@ -83,8 +84,8 @@ class OptCodeController extends GetxController {
       String errorMessage = 'الرمز الذي أدخلته غير صحيح أو انتهت صلاحيته.';
       if (e is DioException) {
         if (e.response != null) {
-          print('StatusCode: ${e.response?.statusCode}');
-          print('Response Data: ${e.response?.data}');
+          print('[Error StatusCode]: ${e.response?.statusCode}');
+          print('[Error Data]: ${e.response?.data}');
           final responseData = e.response?.data;
           if (responseData is Map && responseData.containsKey('error')) {
             errorMessage = responseData['error'];
