@@ -132,13 +132,16 @@ class ApiService {
   Future<Response> login({
     required String email,
     required String password,
-    required String otp,
+    // required String otp,
   }) async {
     try {
       final response = await _dio.post(
         '${_baseUrl}user/login/',
-        data: {'email': email, 'password': password, 'otp': otp},
-        options: Options(headers: {'Content-Type': 'application/json'}),
+        data: {
+          'email': email, 'password': password,
+          // 'otp': otp
+        },
+        // options: Options(headers: {'Content-Type': 'application/json'}),
       );
 
       if (response.statusCode == 200) {

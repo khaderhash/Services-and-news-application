@@ -1,16 +1,70 @@
-  لا5# my_app11
+# Syrian Society for Social Development - Mobile App
 
-A new Flutter project.
+This is the Syrian Society for Social Development's (SSSD) pilot app, designed to serve as a digital bridge between the organization and its beneficiaries. The app provides an easy-to-use and efficient platform that allows users to access services, stay informed, and engage with the society.
 
-## Getting Started
+Built with Flutter and GetX, the application ensures a high-performance, responsive, and native experience on both Android and iOS devices from a single codebase.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ Key Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 👤 Full User Authentication:
+- Secure user registration and OTP email confirmation.  
+- Robust login/logout functionality.  
+- Password recovery via email OTP.  
+- Automated token management with Access & Refresh Tokens for persistent sessions.  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 📋 Beneficiary Profile & Data Management:
+- A comprehensive multi-tab form for users to submit and update their personal and social information.  
+- Smart Profile screen to view and edit personal data, including profile picture upload.  
+
+### 🛠️ Service Request Management:
+- A dedicated services portal allowing users to apply for different types of aid.  
+  - **Material Aid:** Request essential items.  
+  - **Medical Aid:** Submit requests for medical assistance, complete with medical report uploads.  
+  - **Small Projects:** Apply for support to start small-scale projects.  
+- Each service has a smart interface that shows the current request status (Pending, Approved, etc.) or a form to create a new one.  
+- Users can also delete pending requests.  
+
+### 📰 News & Activities Feed:
+- A dynamic home screen displaying the latest news and activities from the SSSD.  
+- Users can tap on any item to view full details, including descriptions and images.  
+
+### ⭐ User Feedback System:
+- An integrated feedback module where users can rate the services on a scale and provide written comments.  
+
+### 📱 Modern & Responsive UI:
+- A clean, intuitive, and user-friendly interface based on the professional design from Behance.  
+- Fully responsive layout that adapts to various screen sizes.  
+- Support for both Arabic (RTL) and English languages.  
+
+---
+
+## ⚙️ Technical Stack
+- **Framework:** Flutter (for cross-platform development)  
+- **State Management:** GetX (for reactive state management, dependency injection, and navigation)  
+- **Networking:** dio (for powerful and efficient API requests)  
+- **Local Storage:** flutter_secure_storage (for securely storing auth tokens)  
+- **Image Handling:** image_picker (for selecting images from the gallery/camera)  
+- **Architecture:** Clean Architecture (Views, Controllers, ApiService, Models).  
+
+---
+
+## 🚀 Getting Started
+### Prerequisites:
+- Flutter SDK installed.  
+- An editor like VS Code or Android Studio.  
+  
+
+
+## 🎨 Design
+The application's UI/UX is based on the high-fidelity mockups available on Behance.  
+👉 [View the Design on Behance](https://www.behance.net/gallery/234016133/Syrian-society-for-social-development)  
+
+
+### Installation:
+Clone the repo:
+```sh
+git clone https://github.com/khaderhash/Services-and-news-application.git
+
+

@@ -32,22 +32,24 @@ class BeneficiaryController extends GetxController {
   final notesCtrl = TextEditingController();
   final familyMembersCtrl = TextEditingController();
 
-  final livingStatusList = [
-    "نازح داخلي",
-    "عائد",
-    "لاجئ",
-    "أفراد مجتمع متضررين",
-    "مستضاف",
-    "غير ذلك",
-  ];
   final residenceTypeList = [
-    "ملك",
-    "استئجار",
-    "استضافة",
-    "مركز إيواء اجتماعي",
-    "مخيم",
-    "غير ذلك",
+    "مستضاف", // hosted
+    "عائد", // returnee
+    "لاجئ", // refugee
+    "نازح داخلي", // idp
+    "أفراد مجتمع متضرر", // affected_community
+    "غير ذلك", // other
   ];
+
+  final livingStatusList = [
+    "ملك", // owned
+    "استئجار", // rented
+    "استضافة", // hosted
+    "مركز إيواء اجتماعي", // shelter_center
+    "مخيم", // camp
+    "غير ذلك", // other
+  ];
+
   final genderList = ["ذكر", "أنثى"];
   final maritalStatusList = ["أعزب", "متزوج", "مطلق", "أرمل", "الزوج مفقود"];
   final disabilityList = ["سليم", "ذو أعاقة", "مرض مزمن"];
@@ -169,7 +171,10 @@ class BeneficiaryController extends GetxController {
       ),
       "education": _mapAppToApi('education', dropdownValues['education']),
     };
-
+    print("==== FORM DATA ====");
+    formData.forEach((key, value) {
+      print("$key : $value (${value.runtimeType})");
+    });
     try {
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
@@ -188,7 +193,13 @@ class BeneficiaryController extends GetxController {
       checkUserBeneficiaryStatus();
     } on DioException catch (e) {
       Get.back();
+      print(e);
       Get.snackbar('خطأ', 'فشلت العملية');
+      print("=== API ERROR ===");
+      print("STATUS CODE: ${e.response?.statusCode}");
+      print("RESPONSE DATA: ${e.response?.data}");
+      print("REQUEST DATA: $formData");
+      Get.snackbar('خطأ', 'فشلت العملية: ${e.response?.data}');
     }
   }
 
@@ -197,19 +208,19 @@ class BeneficiaryController extends GetxController {
     const Map<String, Map<String, String>> mapping = {
       'gender': {"ذكر": "male", "أنثى": "female"},
       'living_status': {
-        "نازح داخلي": "idp",
-        "عائد": "returnee",
-        "لاجئ": "refugee",
-        "أفراد مجتمع متضررين": "affected_community",
-        "مستضاف": "hosted",
-        "غير ذلك": "other",
-      },
-      'residence_type': {
         "ملك": "owned",
         "استئجار": "rented",
         "استضافة": "hosted",
         "مركز إيواء اجتماعي": "shelter_center",
         "مخيم": "camp",
+        "غير ذلك": "other",
+      },
+      'residence_type': {
+        "مستضاف": "hosted",
+        "عائد": "returnee",
+        "لاجئ": "refugee",
+        "نازح داخلي": "idp",
+        "أفراد مجتمع متضرر": "affected_community",
         "غير ذلك": "other",
       },
       'marital_status': {
@@ -240,19 +251,19 @@ class BeneficiaryController extends GetxController {
     const Map<String, Map<String, String>> mapping = {
       'gender': {"male": "ذكر", "female": "أنثى"},
       'living_status': {
-        "idp": "نازح داخلي",
-        "returnee": "عائد",
-        "refugee": "لاجئ",
-        "affected_community": "أفراد مجتمع متضررين",
-        "hosted": "مستضاف",
-        "other": "غير ذلك",
-      },
-      'residence_type': {
         "owned": "ملك",
         "rented": "استئجار",
         "hosted": "استضافة",
         "shelter_center": "مركز إيواء اجتماعي",
         "camp": "مخيم",
+        "other": "غير ذلك",
+      },
+      'residence_type': {
+        "hosted": "مستضاف",
+        "returnee": "عائد",
+        "refugee": "لاجئ",
+        "idp": "نازح داخلي",
+        "affected_community": "أفراد مجتمع متضرر",
         "other": "غير ذلك",
       },
       'marital_status': {

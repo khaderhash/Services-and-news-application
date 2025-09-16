@@ -16,6 +16,9 @@ class _SignupPageState extends State<SignupPage> {
   int currentStep = 0;
   String selectedGender = 'ذكر';
 
+  bool _showPassword = false;
+  bool _showConfirmPassword = false;
+
   void goToStep(int step) {
     setState(() {
       currentStep = step;
@@ -26,7 +29,6 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
@@ -128,7 +130,6 @@ class _SignupPageState extends State<SignupPage> {
                     ],
                   ),
                   SizedBox(height: screenHeight * 0.02),
-
                   IndexedStack(
                     index: currentStep,
                     children: [
@@ -262,9 +263,14 @@ class _SignupPageState extends State<SignupPage> {
           CustomTextFormFieled(
             hinText: "كلمة المرور",
             prefIcon: Icons.lock_outline,
-            suffIcon: Icons.visibility,
+            suffIcon: _showPassword ? Icons.visibility_off : Icons.visibility,
+            onSuffixTap: () {
+              setState(() {
+                _showPassword = !_showPassword;
+              });
+            },
             controller: controler.passController,
-            isSecure: true,
+            isSecure: !_showPassword,
             validater: (val) {
               if (val == null || val.isEmpty) return "يرجى إدخال كلمة المرور";
               if (val.length < 6) return "كلمة المرور قصيرة جداً";
@@ -274,9 +280,16 @@ class _SignupPageState extends State<SignupPage> {
           CustomTextFormFieled(
             hinText: "تأكيد كلمة المرور",
             prefIcon: Icons.lock_outline,
-            suffIcon: Icons.visibility,
+            suffIcon: _showConfirmPassword
+                ? Icons.visibility_off
+                : Icons.visibility,
+            onSuffixTap: () {
+              setState(() {
+                _showConfirmPassword = !_showConfirmPassword;
+              });
+            },
             controller: controler.confirmPassController,
-            isSecure: true,
+            isSecure: !_showConfirmPassword,
             validater: (val) {
               if (val == null || val.isEmpty) return "يرجى تأكيد كلمة المرور";
               if (val != controler.passController.text) {

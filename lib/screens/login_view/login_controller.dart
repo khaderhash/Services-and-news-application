@@ -27,20 +27,20 @@ class LoginController extends GetxController {
         key: 'verified_otp_for_${UsersController.text.trim()}',
       );
 
-      if (otp == null || otp.isEmpty) {
-        Get.snackbar(
-          'خطأ',
-          'الرجاء تأكيد حسابك أولاً عبر رمز OTP.',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        isLooading.value = false;
-        return;
-      }
+      // if (otp == null || otp.isEmpty) {
+      //   Get.snackbar(
+      //     'خطأ',
+      //     'الرجاء تأكيد حسابك أولاً عبر رمز OTP.',
+      //     snackPosition: SnackPosition.BOTTOM,
+      //   );
+      //   isLooading.value = false;
+      //   return;
+      // }
 
       final response = await _apiService.login(
         email: UsersController.text.trim(),
         password: passwordController.text.trim(),
-        otp: otp,
+        // otp: otp,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.offAll(() => HomeScreen());

@@ -64,11 +64,11 @@ class OptCodeController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (isRegistration) {
-          await _apiService.confirmRegisterOtp(email: email, otp: otp);
           Get.snackbar(
             'نجاح',
             'تم تأكيد الحساب بنجاح. يمكنك الآن تسجيل الدخول.',
           );
+          await Future.delayed(const Duration(seconds: 2));
           Get.offAll(() => const Login());
         } else {
           Get.snackbar('نجاح', 'تم التحقق من الرمز.');

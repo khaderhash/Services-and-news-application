@@ -3,11 +3,18 @@ import 'package:get/get.dart';
 import '../forget_pass_view/forget_pass.dart';
 import 'profile_controller.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);
 
-  final controller = Get.put(ProfileController());
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final controller = Get.put(ProfileController(), permanent: true);
+
   final Color primaryColor = Color(0xFF4B2E83);
+
   final Color fieldColor = Color(0xFFE6D6FF);
 
   @override

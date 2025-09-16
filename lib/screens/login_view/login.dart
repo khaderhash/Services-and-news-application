@@ -7,6 +7,7 @@ import '../../UI/shared/utilities.dart';
 import '../../translation/app_language.dart';
 import '../forget_pass_view/forget_pass.dart';
 import '../home_view/home.dart';
+import '../landing_page_view/landing_page.dart';
 import 'login_controller.dart';
 
 class Login extends StatefulWidget {
@@ -41,6 +42,20 @@ class _LoginState extends State<Login> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.arrow_back,
+                                color: Colors.purple,
+                              ),
+                              onPressed: () {
+                                Get.offAll(() => const LandingPage());
+                              },
+                            ),
+                          ),
+                          SizedBox(height: size.height * 0.05),
+
                           SizedBox(height: size.height * 0.1),
                           Padding(
                             padding: EdgeInsets.only(right: size.height * 0.05),
